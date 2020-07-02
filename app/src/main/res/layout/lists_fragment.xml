@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark"
+    >
+
+    <TextView
+        android:id="@+id/topBar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textColor="@color/green"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="2sp"
+        app:autoSizeMaxTextSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/menuBar"
+        android:background="@color/dark"/>
+
+    <TextView
+        android:id="@+id/listsTextView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Lists"
+        android:gravity="center"
+        android:textColor="@color/green"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="2sp"
+        app:autoSizeMaxTextSize="30sp"
+        app:layout_constraintEnd_toEndOf="@id/deleteStart"
+        app:layout_constraintStart_toStartOf="@id/backArrowEnd"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/menuBar"
+        android:background="@color/Transparent"/>
+
+    <ImageView
+        android:id="@+id/addImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/ic_add_24px"
+        app:layout_constraintEnd_toEndOf="@id/addEnd"
+        app:layout_constraintStart_toStartOf="@id/addStart"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/menuBar"
+        />
+
+    <ImageView
+        android:id="@+id/deleteImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/ic_delete_24px"
+        app:layout_constraintEnd_toEndOf="@id/deleteEnd"
+        app:layout_constraintStart_toStartOf="@id/deleteStart"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/menuBar"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/backArrowEnd"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listsRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menuBar"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/menuBar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.10"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/deleteStart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.65"
+            />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/deleteEnd"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.77"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/addStart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.83"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/addEnd"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

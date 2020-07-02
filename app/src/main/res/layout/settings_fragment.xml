@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/topBar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textColor="@android:color/white"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="2sp"
+        app:autoSizeMaxTextSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/menuBar"
+        android:background="@color/dark"/>
+
+    <TextView
+        android:id="@+id/settingsTextView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Settings"
+        android:gravity="center"
+        android:textColor="@color/green"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="2sp"
+        app:autoSizeMaxTextSize="40sp"
+        app:layout_constraintEnd_toEndOf="@id/saveStart"
+        app:layout_constraintStart_toStartOf="@id/backArrowEnd"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/menuBar"
+        android:background="@color/dark"/>
+
+    <TextView
+        android:id="@+id/SaveTV"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/save"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/green"
+        android:textStyle="bold"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="5sp"
+        app:autoSizeMaxTextSize="25sp"
+        app:layout_constraintEnd_toEndOf="@id/saveEnd"
+        app:layout_constraintStart_toStartOf="@id/saveStart"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/menuBar"
+        android:background="@color/dark"/>
+
+    <TextView
+        android:id="@+id/SearchableTV"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/Searchable"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/green"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="5sp"
+        app:autoSizeMaxTextSize="20sp"
+        app:layout_constraintEnd_toEndOf="@id/addFriendsStart"
+        app:layout_constraintStart_toStartOf="@id/backArrowEnd"
+        app:layout_constraintTop_toBottomOf="@id/menuBar"
+        app:layout_constraintBottom_toTopOf="@id/Searchable"
+        android:background="@color/white"/>
+
+    <TextView
+        android:id="@+id/changeCurrency"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/changeCurrency"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/green"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="5sp"
+        app:autoSizeMaxTextSize="20sp"
+        app:layout_constraintEnd_toEndOf="@id/addFriendsStart"
+        app:layout_constraintStart_toStartOf="@id/backArrowEnd"
+        app:layout_constraintTop_toBottomOf="@id/SearchableTV"
+        app:layout_constraintBottom_toBottomOf="@id/ChangeEmail"
+        android:background="@color/white"/>
+
+    <TextView
+        android:id="@+id/Logout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/logout"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/green"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="5sp"
+        app:autoSizeMaxTextSize="20sp"
+        app:layout_constraintEnd_toEndOf="@id/addFriendsStart"
+        app:layout_constraintStart_toStartOf="@id/backArrowEnd"
+        app:layout_constraintTop_toBottomOf="@id/ChangeEmail"
+        app:layout_constraintBottom_toBottomOf="@id/ChangePassword"
+        android:background="@color/white"/>
+
+    <TextView
+        android:id="@+id/currencyTV"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:shadowColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="@id/addFriendsEnd"
+        app:layout_constraintStart_toStartOf="@id/switchStart"
+        app:layout_constraintTop_toBottomOf="@id/SearchableTV"
+        app:layout_constraintBottom_toBottomOf="@id/ChangeEmail"
+        />
+
+    <Switch
+        android:id="@+id/changeSearchable"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:shadowColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="@id/addFriendsEnd"
+        app:layout_constraintStart_toStartOf="@id/switchStart"
+        app:layout_constraintTop_toBottomOf="@id/menuBar"
+        app:layout_constraintBottom_toTopOf="@id/Searchable"
+        />
+
+    <!--
+    <TextView
+        android:id="@+id/EmailTV"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/changeEmail"
+        android:maxLines="1"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="5sp"
+        app:autoSizeMaxTextSize="20sp"
+        app:layout_constraintEnd_toEndOf="@id/addFriendsStart"
+        app:layout_constraintStart_toStartOf="@id/backArrowEnd"
+        app:layout_constraintTop_toTopOf="@id/Searchable"
+        app:layout_constraintBottom_toTopOf="@id/ChangeEmail"
+        android:background="@color/white"/>
+
+    <ImageView
+        android:id="@+id/changeEmail"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/ic_keyboard_arrow_right_24px"
+        android:gravity="center"
+        android:shadowColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="@id/addFriendsEnd"
+        app:layout_constraintStart_toStartOf="@id/addFriendsStart"
+        app:layout_constraintTop_toTopOf="@id/Searchable"
+        app:layout_constraintBottom_toTopOf="@id/ChangeEmail"
+        />
+
+    <TextView
+        android:id="@+id/passwordTV"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/changePassword"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/colorPrimaryDark"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="2sp"
+        app:autoSizeMaxTextSize="20sp"
+        app:layout_constraintEnd_toEndOf="@id/addFriendsStart"
+        app:layout_constraintStart_toStartOf="@id/backArrowEnd"
+        app:layout_constraintTop_toTopOf="@id/ChangeEmail"
+        app:layout_constraintBottom_toTopOf="@id/ChangePassword"
+        android:background="@color/white"/>
+
+    <ImageView
+        android:id="@+id/changePassword"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/ic_keyboard_arrow_right_24px"
+        android:gravity="center"
+        android:shadowColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="@id/addFriendsEnd"
+        app:layout_constraintStart_toStartOf="@id/addFriendsStart"
+        app:layout_constraintTop_toTopOf="@id/ChangeEmail"
+        app:layout_constraintBottom_toTopOf="@id/ChangePassword"
+        />
+-->
+    <ImageView
+        android:id="@+id/backArrow"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_arrow_back_ios_24px"
+        app:layout_constraintEnd_toEndOf="@id/backArrowEnd"
+        app:layout_constraintStart_toStartOf="@id/backArrowStart"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/menuBar"
+        />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/menuBar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.10"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/Searchable"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.20"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/ChangePassword"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.40"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/ChangeEmail"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.30"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/backArrowStart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/backArrowEnd"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/addFriendsStart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.70" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/switchStart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/addFriendsEnd"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/saveStart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/saveEnd"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

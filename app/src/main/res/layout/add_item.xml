@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/cancel"
+                android:text="Cancel"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:textColor="@color/blue"
+                android:background="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/split"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/textViewTop"/>
+
+            <Button
+                android:id="@+id/save"
+                android:layout_width="209dp"
+                android:layout_height="80dp"
+                android:background="@color/dark"
+                android:text="save"
+                android:textColor="@android:color/white"
+                app:layout_constraintBottom_toTopOf="@id/textViewTop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/split"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <!--
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Insert Name of list"
+        android:gravity="center_vertical"
+        app:autoSizeMaxTextSize="20sp"
+        app:autoSizeMinTextSize="2sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintTop_toTopOf="@id/textViewTop"
+        app:layout_constraintBottom_toBottomOf="@id/textViewBottom"
+        app:layout_constraintStart_toStartOf="@id/left"
+        app:layout_constraintEnd_toEndOf="@id/right"/>
+        -->
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/giftname"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:maxLength="30"
+                android:background="@android:color/white"
+                android:hint="Name (Required) "
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:paddingLeft="2sp"
+                app:layout_constraintBottom_toBottomOf="@id/firstEditTextBottom"
+                app:layout_constraintEnd_toEndOf="@id/right"
+                app:layout_constraintStart_toStartOf="@id/left"
+                app:layout_constraintTop_toTopOf="@id/firstEditTextTop" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/price"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:maxLength="9"
+                android:background="@android:color/white"
+                android:hint="Price (Optional)"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:paddingLeft="2sp"
+                app:layout_constraintBottom_toBottomOf="@id/priceBottom"
+                app:layout_constraintEnd_toEndOf="@id/right"
+                app:layout_constraintStart_toStartOf="@id/left"
+                app:layout_constraintTop_toTopOf="@id/priceTop" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/link"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:paddingLeft="2sp"
+                android:hint="Link (Optional)"
+                android:maxLength="30"
+                android:background="@android:color/white"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                app:layout_constraintBottom_toBottomOf="@id/linkBottom"
+                app:layout_constraintEnd_toEndOf="@id/right"
+                app:layout_constraintStart_toStartOf="@id/left"
+                app:layout_constraintTop_toTopOf="@id/linkTop" />
+
+
+            <ImageView
+                android:id="@+id/listimage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/dark"
+                app:layout_constraintBottom_toBottomOf="@id/secondEditTextBottom"
+                app:layout_constraintEnd_toEndOf="@id/right"
+                app:layout_constraintStart_toStartOf="@id/left"
+                app:layout_constraintTop_toTopOf="@id/secondEditTextTop" />
+
+            <ImageView
+                android:id="@+id/cameraIcon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/ic_add_a_photo_24px"
+                app:layout_constraintBottom_toBottomOf="@id/secondEditTextBottom"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="@id/cameraRight"
+                app:layout_constraintStart_toStartOf="@id/cameraLeft"
+                app:layout_constraintTop_toTopOf="@id/secondEditTextTop" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/split"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.50" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/left"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/right"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/cameraLeft"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.40" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/cameraRight"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.60" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/textViewTop"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.10" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/textViewBottom"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.20" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/firstEditTextTop"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.15" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/firstEditTextBottom"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.23" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/priceTop"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.25" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/priceBottom"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.33" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/linkTop"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.35" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/linkBottom"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.43" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/secondEditTextTop"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.47" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/secondEditTextBottom"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.80" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

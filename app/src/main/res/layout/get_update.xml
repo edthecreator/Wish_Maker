@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/dark">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/picleft"
+        app:layout_constraintEnd_toEndOf="@id/picright"
+        app:layout_constraintTop_toTopOf="@id/pictop2"
+        app:layout_constraintBottom_toBottomOf="@id/pictop"
+        android:text="Oh No !"
+        android:gravity="center"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMaxTextSize="30sp"
+        app:autoSizeMinTextSize="2sp"
+        android:textColor="@color/blue"
+        />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_sentiment_dissatisfied_24px"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="@id/picleft"
+        app:layout_constraintEnd_toEndOf="@id/picright"
+        app:layout_constraintTop_toTopOf="@+id/pictop"
+        app:layout_constraintBottom_toBottomOf="@id/picbottom"
+        />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/picleft"
+        app:layout_constraintEnd_toEndOf="@id/picright"
+        app:layout_constraintTop_toTopOf="@id/picbottom"
+        app:layout_constraintBottom_toBottomOf="@id/picbottom2"
+        android:text="This version is no longer supported. Please update application via Google Play Store "
+        android:gravity="center"
+        android:maxLines="3"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMaxTextSize="30sp"
+        app:autoSizeMinTextSize="2sp"
+        android:textColor="@color/blue"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/picleft"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.20"
+        android:orientation="vertical"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/picright"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.80"
+        android:orientation="vertical"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/pictop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.30"
+        android:orientation="horizontal"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/pictop2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/picbottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.70"
+        android:orientation="horizontal"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/picbottom2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

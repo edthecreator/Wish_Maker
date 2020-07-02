@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent_dark">
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.Large.Circle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        app:layout_constraintDimensionRatio="1:1"
+        app:SpinKit_Color="@color/blue"
+        app:layout_constraintStart_toStartOf="@id/loadingleft"
+        app:layout_constraintEnd_toEndOf="@id/loadingright"
+        app:layout_constraintTop_toTopOf="@id/loadingtop"
+        app:layout_constraintBottom_toBottomOf="@id/loadingbottom"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/loadingleft"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.20"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/loadingright"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.80"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/loadingtop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.35"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/loadingbottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.65"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

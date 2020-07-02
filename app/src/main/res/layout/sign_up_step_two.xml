@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditText
+        android:id="@+id/firstname"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:maxLength="30"
+        android:background="@android:color/white"
+        android:hint="first name"
+        android:inputType="textPersonName"
+        android:maxLines="1"
+        android:paddingLeft="4sp"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/FnameBottom"
+        app:layout_constraintEnd_toEndOf="@id/right"
+        app:layout_constraintStart_toStartOf="@id/left"
+        app:layout_constraintTop_toTopOf="@id/FnameTop" />
+
+
+    <EditText
+        android:id="@+id/lastname"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:maxLength="30"
+        android:background="@android:color/white"
+        android:focusableInTouchMode="true"
+        android:hint="Last Name"
+        android:imeOptions="actionDone"
+        android:inputType="textPersonName"
+        android:maxLines="1"
+        android:paddingLeft="4sp"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/LnameBottom"
+        app:layout_constraintEnd_toEndOf="@id/right"
+        app:layout_constraintStart_toStartOf="@id/left"
+        app:layout_constraintTop_toTopOf="@id/LnameTop" />
+
+    <ImageView
+        android:id="@+id/backArrow"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_arrow_back_ios_24px"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintBottom_toBottomOf="@id/backArrowBottom"
+        app:layout_constraintStart_toStartOf="@id/left"
+        app:layout_constraintEnd_toEndOf="@id/arrowEnd"
+        />
+
+    <Button
+        android:id="@+id/sign_in_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/phoneNumberTop"
+        app:layout_constraintBottom_toTopOf="@id/phoneNumberBottom"
+        app:layout_constraintStart_toStartOf="@id/left"
+        app:layout_constraintEnd_toEndOf="@id/right"
+        android:background="@color/blue"
+        android:text="Continue"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:autoSizeMaxTextSize="20sp"
+        app:autoSizeMinTextSize="2sp"
+        app:autoSizeTextType="uniform" />
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/FnameTop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.20"
+        android:orientation="horizontal"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/FnameBottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.30"
+        android:orientation="horizontal"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/LnameTop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.35"
+        android:orientation="horizontal"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/LnameBottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.45"
+        android:orientation="horizontal"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/phoneNumberTop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.50"
+        android:orientation="horizontal"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/phoneNumberBottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.60"
+        android:orientation="horizontal"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/backArrowBottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.10"
+        android:orientation="horizontal"/>
+
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.05"
+        android:orientation="vertical"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/arrowEnd"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.15"
+        android:orientation="vertical"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.90"
+        android:orientation="vertical"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

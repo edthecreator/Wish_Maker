@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100sp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_item">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@mipmap/gift_default"
+        app:layout_constraintTop_toTopOf="@id/top"
+        app:layout_constraintBottom_toBottomOf="@id/bottom"
+        app:layout_constraintStart_toStartOf="@id/picstart"
+        app:layout_constraintEnd_toEndOf="@id/picend"
+        app:layout_constraintDimensionRatio="1:1"
+        />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:fontFamily="sans-serif-condensed"
+        app:layout_constraintTop_toTopOf="@id/top"
+        app:layout_constraintBottom_toBottomOf="@id/bottom"
+        app:layout_constraintStart_toStartOf="@id/namestart"
+        app:layout_constraintEnd_toEndOf="@id/nameend"
+        app:autoSizeMinTextSize="2sp"
+        app:autoSizeMaxTextSize="30sp"
+        app:autoSizeTextType="uniform"
+        android:maxLines="1"
+        android:gravity="center_vertical"
+        />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Priceless"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="@color/green"
+        android:fontFamily="sans-serif-condensed"
+        app:layout_constraintTop_toTopOf="@id/topPrice"
+        app:layout_constraintBottom_toBottomOf="@id/bottomPrice"
+        app:layout_constraintStart_toStartOf="@id/pricestart"
+        app:layout_constraintEnd_toEndOf="@id/priceend"
+        android:maxLength="12"
+        app:autoSizeMinTextSize="2sp"
+        app:autoSizeMaxTextSize="30sp"
+        app:autoSizeTextType="uniform"
+        android:maxLines="1"
+        />
+
+    <TextView
+        android:id="@+id/delete"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Delete"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@color/green"
+        android:fontFamily="sans-serif-condensed"
+        app:layout_constraintTop_toTopOf="@id/topPrice"
+        app:layout_constraintBottom_toBottomOf="@id/bottomPrice"
+        app:layout_constraintStart_toStartOf="@id/pricestart"
+        app:layout_constraintEnd_toEndOf="@id/priceend"
+        android:maxLength="12"
+        app:autoSizeMinTextSize="2sp"
+        app:autoSizeMaxTextSize="30sp"
+        app:autoSizeTextType="uniform"
+        android:maxLines="1"
+        />
+
+    <!--
+    <ImageView
+        android:id="@+id/edit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_edit_24px"
+        app:layout_constraintTop_toTopOf="@id/top"
+        app:layout_constraintBottom_toBottomOf="@id/bottom"
+        app:layout_constraintStart_toStartOf="@id/editstart"
+        app:layout_constraintEnd_toEndOf="@id/editend"
+        app:layout_constraintDimensionRatio="1:1"
+        />
+        -->
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/picstart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.02"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/picend"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.10"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topPrice"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.20"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomPrice"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.80"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.90"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/namestart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.30"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/nameend"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.65"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/pricestart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.70"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/priceend"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/editstart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.89"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/editend"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.99"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "610422313125",
+    "firebase_url": "https://wish-maker-b5fe1.firebaseio.com",
+    "project_id": "wish-maker-b5fe1",
+    "storage_bucket": "wish-maker-b5fe1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:610422313125:android:f0cc319a5306c6b4ae7d4c",
+        "android_client_info": {
+          "package_name": "com.eddelacruz.wishmaker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "610422313125-bfesae8evtv63342t0utnr3ejd2dhl8i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXBKCXOsXRU9EbFZAZfqauUUaVIVSvz-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "610422313125-bfesae8evtv63342t0utnr3ejd2dhl8i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

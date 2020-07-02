@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="title_home">Home</string>
+    <string name="title_Wishlist">Wishlist</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="auth_failed">Authentication Failed</string>
+    <string name="minimum_password">Minimum Password</string>
+    <string name="password_link"> Enter Email: </string>
+    <string name="login"> Log In </string>
+    <string name="signup"> Sign Up </string>
+    <string name="logout"> Logout </string>
+    <string name="requests"> Requests </string>
+    <string name="friendSearch"> Enter Name </string>
+    <string name="Search"> Search </string>
+    <string name="Searchable"> Make Account Searchable </string>
+    <string name="changeEmail"> Change Email </string>
+    <string name="changePassword"> Change Password </string>
+    <string name="changeCurrency"> Change Status </string>
+    <string name="save"> Save </string>
+    <string name="USD"> $ </string>
+</resources>
