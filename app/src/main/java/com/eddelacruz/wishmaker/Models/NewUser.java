@@ -4,9 +4,7 @@ import android.graphics.Bitmap;
 
 import com.google.gson.annotations.SerializedName;
 
-public class User {
-    @SerializedName("image")
-    private String image;
+public class NewUser {
 
     @SerializedName("firstName")
     private String firstName;
@@ -14,9 +12,11 @@ public class User {
     @SerializedName("lastName")
     private String lastName;
 
+    @SerializedName("image")
+    private String image;
+
     @SerializedName("email")
     private String email;
-
 
     @SerializedName("uid")
     private String uid;
@@ -31,16 +31,13 @@ public class User {
     private String fullName;
 
 
-    @SerializedName("bitmap_profile")
-    private Bitmap bitmap_profile;
-
-    public User() {
+    public NewUser() {
 
     }
 
 
 
-    public User(String email, String lastName, String firstName, String uid, String status, Long date, String fullName) {
+    public NewUser(String email, String image, String lastName, String firstName, String uid, String status, Long date, String fullName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -50,34 +47,41 @@ public class User {
         this.fullName = fullName;
     }
 
-    public User(String image, String firstName, String lastName, String uid, String status) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.image = image;
-        this.uid = uid;
-        this.status = status;
+    public Long getDate() {
+        return date;
     }
 
-    public String getImage() { return image; }
+    public String getFullName() {
+        return fullName;
+    }
 
-    public String getUid() { return uid; }
-
-    public String getstatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setstatus(String status) {
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setDate(Long date) {
+        this.date = date;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setStatus(String status) {
         this.status = status;
     }
 
+    public String getUid() { return uid; }
+
     public String getEmail() { return email; }
-
-
-    public Bitmap getBitmap_profile() { return bitmap_profile; }
-
-    public void setBitmap_profile(Bitmap bitmap_profile) {
-        this.bitmap_profile = bitmap_profile;
-    }
 
     public void setEmail(String email) { this.email = email; }
 
@@ -98,7 +102,5 @@ public class User {
     }
 
     public void setUid(String uid) { this.uid = uid; }
-
-    public void setImage(String image) { this.image = image; }
 
 }

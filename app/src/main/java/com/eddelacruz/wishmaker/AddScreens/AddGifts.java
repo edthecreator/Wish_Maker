@@ -115,7 +115,7 @@ public class AddGifts extends Fragment implements View.OnClickListener {
                     }
                 } else {
                     try {
-                        FancyToast.makeText(getActivity(),"Plase Input Name !",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                        FancyToast.makeText(getActivity(),"Plase Input Name !",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
@@ -206,12 +206,12 @@ public class AddGifts extends Fragment implements View.OnClickListener {
             wishUrl = String.valueOf(wish_uri);
 
         if(giftListsFragment != null)
-            giftListsFragment.addItemtoAdapter(new Wishes(wishUrl, wish_name, wish_price, wish_link));
+            giftListsFragment.addItemtoAdapter(new Wishes(wishUrl, wish_name, wish_price, wish_link, System.currentTimeMillis()));
 
-        wish_ref.child(name).push().setValue(new Wishes(wishUrl, wish_name, wish_price, wish_link));
+        wish_ref.child(name).push().setValue(new Wishes(wishUrl, wish_name, wish_price, wish_link, System.currentTimeMillis()));
         try {
             removeLoading();
-            FancyToast.makeText(getActivity(),"Gift Successfully Added !",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
+            FancyToast.makeText(getActivity(),"Gift Successfully Added !",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
             getFragmentManager().popBackStack(TransactionNameAndFragmentTag.AddGiftsFragment,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE);
         } catch (NullPointerException e) {

@@ -16,14 +16,18 @@ public class Wishes {
     @SerializedName("link")
     private String link;
 
+    @SerializedName("created_at")
+    private Long created_At;
+
     public Wishes() {
     }
 
-    public Wishes(String image, String name, Double price, String link) {
+    public Wishes(String image, String name, Double price, String link, Long created_at) {
         this.image = image;
         this.name = name;
         this.price = price;
         this.link = link;
+        this.created_At = created_at;
     }
 
     public String getImage() { return image; }
@@ -33,6 +37,14 @@ public class Wishes {
     public Double getPrice() { return price; }
 
     public String getLink() { return link; }
+
+    public Long getCreated_At() {
+        return created_At;
+    }
+
+    public void setCreated_At(Long created_At) {
+        this.created_At = created_At;
+    }
 
     public void setLink(String link) { this.link = link; }
 

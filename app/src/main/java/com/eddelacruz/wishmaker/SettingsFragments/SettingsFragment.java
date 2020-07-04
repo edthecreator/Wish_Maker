@@ -3,6 +3,7 @@ package com.eddelacruz.wishmaker.SettingsFragments;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,18 +21,25 @@ import androidx.fragment.app.FragmentTransaction;
 import com.eddelacruz.wishmaker.MainActivity;
 import com.eddelacruz.wishmaker.Managers.DataManager;
 import com.eddelacruz.wishmaker.Managers.TransactionNameAndFragmentTag;
+import com.eddelacruz.wishmaker.Models.Friends;
+import com.eddelacruz.wishmaker.Models.NewUser;
 import com.eddelacruz.wishmaker.Models.Settings;
+import com.eddelacruz.wishmaker.Models.User;
 import com.eddelacruz.wishmaker.R;
 import com.eddelacruz.wishmaker.ViewPagerFragments.WishlistMainFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener {
     private static String TAG = "Settings Fragment";
@@ -59,8 +67,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         //db = dbHelper.getReadableDatabase();
         //pullFromSQLite(db);
 
-        firebaseCall();
-
         backArrow = rootView.findViewById(R.id.backArrow);
         Save = rootView.findViewById(R.id.SaveTV);
         changeSeachable = rootView.findViewById(R.id.changeSearchable);
@@ -72,6 +78,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         changeSeachable.setOnClickListener(this);
         Save.setOnClickListener(this);
         backArrow.setOnClickListener(this);
+
+
+        firebaseCall();
     }
 
     @Override
@@ -86,14 +95,26 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.SaveTV:
+                Long t4Check = System.currentTimeMillis() - DataManager.getInstance().getSettings().getLast_date_changed();
                     if(changeSeachable.isChecked() && !stateOfSwitch) {
+
                        // ((MainActivity) getActivity()).setSettings(true);
-                        firebasePush(true);
+                        if(t4Check > TimeUnit.HOURS.toMillis(24)) {
+                            firebasePush(true);
+                            stateOfSwitch = true;
+                        } else {
+                            FancyToast.makeText(this.getContext(), "Searchability changes are allowed once every 24 hours", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        }
                     } else if(!changeSeachable.isChecked()  && stateOfSwitch) {
                         //((MainActivity) getActivity()).setSettings(true);
-                        firebasePush(false);
+                        if(t4Check > TimeUnit.HOURS.toMillis(24)) {
+                            firebasePush(false);
+                            stateOfSwitch = false;
+                        } else {
+                            FancyToast.makeText(this.getContext(), "Searchability changes are allowed once every 24 hours", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        }
                     } else {
-                        firebasePush(stateOfSwitch);
+                        //firebasePush(stateOfSwitch);
                         //((MainActivity) getActivity()).setSettings(false);
                     }
 
@@ -126,6 +147,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     private void firebasePush(final Boolean stSwitch) {
         final String uid = DataManager.getInstance().getUserId();
+
+
         query = FirebaseDatabase.getInstance().getReference()
                 .child("settings").child(uid).limitToFirst(1);
 
@@ -134,16 +157,29 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    Map<String, Object> image = new HashMap<String, Object>();;
+                for (final DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    Map<String, Object> image = new HashMap<String, Object>();
+                    Long currentDate = System.currentTimeMillis();
                     image.put("searchable", stSwitch);
+                    image.put("last_date_changed", currentDate);
+                    DataManager.getInstance().getSettings().setSearchable(stSwitch);
 
-                    Log.d(TAG, "User Query : " + userSnapshot.getKey());
 
                     final FirebaseDatabase database = FirebaseDatabase.getInstance();
                     final DatabaseReference list_ref = database.getReference("settings").child(uid).child(userSnapshot.getKey());
 
-                    list_ref.updateChildren(image);
+                    list_ref.updateChildren(image).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                        }
+                    });
+
+                    if(stSwitch) {
+                        userSwitch("private_users", "users");
+                    }
+                    else {
+                        userSwitch("users", "private_users");
+                    }
                 try {
                     getFragmentManager().popBackStack(TransactionNameAndFragmentTag.SettingsFragment,
                             FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -158,6 +194,40 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    private void userSwitch(final String remove, final String add) {
+        Query query2 = FirebaseDatabase.getInstance().getReference()
+                .child(remove).child(uid).limitToFirst(1);
+
+        Log.d(TAG, "User Query : " + uid);
+
+            query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        final NewUser user2 = (new NewUser(userSnapshot.child("email").getValue(String.class), userSnapshot.child("image").getValue(String.class), userSnapshot.child("firstName").getValue(String.class), userSnapshot.child("lastName").getValue(String.class), userSnapshot.child("uid").getValue(String.class), userSnapshot.child("status").getValue(String.class), userSnapshot.child("date").getValue(Long.class), userSnapshot.child("fullName").getValue(String.class)));
+                        Log.d(TAG, "User initialized with " + user2.getFirstName() + " imagelink : ");
+                        dataSnapshot.getRef().removeValue();
+
+
+
+                        final DatabaseReference requests_ref = FirebaseDatabase.getInstance().getReference().child(add).child(uid);
+                        requests_ref.push().setValue(user2).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                            }
+                        });
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
     }
 
     /*
@@ -185,34 +255,43 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     } */
 
     private void firebaseCall() {
-        query = FirebaseDatabase.getInstance().getReference()
-                .child("settings").child(uid).limitToFirst(1);
+        if(DataManager.getInstance().getSettings() != null) {
+            stateOfSwitch = DataManager.getInstance().getSettings().getSearchable();
+            if (stateOfSwitch) {
+                changeSeachable.setChecked(true);
+            } else {
+                changeSeachable.setChecked(false);
+            }
+        } else {
+            query = FirebaseDatabase.getInstance().getReference()
+                    .child("settings").child(uid).limitToFirst(1);
 
-        Log.d(TAG, "User Query : " + uid);
+            Log.d(TAG, "User Query : " + uid);
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    stateOfSwitch = (userSnapshot.child("searchable").getValue(Boolean.class));
-                    if(stateOfSwitch) {
-                        changeSeachable.setChecked(true);
-                    } else {
-                        changeSeachable.setChecked(false);
-                    }
-                   // dbHelper.addSettingsEntry(searchable);
-                    try {
-                      //  ((MainActivity) getActivity()).setSettings(false);
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        stateOfSwitch = (userSnapshot.child("searchable").getValue(Boolean.class));
+                        if (stateOfSwitch) {
+                            changeSeachable.setChecked(true);
+                        } else {
+                            changeSeachable.setChecked(false);
+                        }
+                        // dbHelper.addSettingsEntry(searchable);
+                        try {
+                            //  ((MainActivity) getActivity()).setSettings(false);
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
     }
 
 }

@@ -25,6 +25,7 @@ import com.eddelacruz.wishmaker.MainActivity;
 import com.eddelacruz.wishmaker.Managers.DataManager;
 import com.eddelacruz.wishmaker.Managers.TransactionNameAndFragmentTag;
 import com.eddelacruz.wishmaker.Models.Friends;
+import com.eddelacruz.wishmaker.Models.Lists;
 import com.eddelacruz.wishmaker.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -52,6 +53,7 @@ public class FriendRequestFragment extends Fragment implements View.OnClickListe
     private Friends friend;
     private ArrayList<Friends> friendList = new ArrayList<>();
     private FriendRequestAdapter friendRequestAdapter;
+    private boolean noMorePulls = false;
 
     @Nullable
     @Override
@@ -77,7 +79,7 @@ public class FriendRequestFragment extends Fragment implements View.OnClickListe
 
     private void firebaseCall() {
         query = FirebaseDatabase.getInstance().getReference()
-                .child("requests").child(myuid).limitToFirst(7);
+                .child("requests").child(myuid).orderByChild("name").limitToFirst(7);
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -85,6 +87,10 @@ public class FriendRequestFragment extends Fragment implements View.OnClickListe
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     friend = (new Friends(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class),  userSnapshot.child("uid").getValue(String.class)));
                     friendList.add(friend);
+                }
+
+                if(friendList.size() < 7) {
+                    noMorePulls = true;
                 }
                 setupAdapter(friendList);
                 removeLoading();
@@ -119,7 +125,60 @@ public class FriendRequestFragment extends Fragment implements View.OnClickListe
                 }
             }
         });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                    anotherPull();
+                    Log.d("-----","end");
+
+                }
+            }
+        });
         recyclerView.setAdapter(friendRequestAdapter);
+    }
+
+    private void anotherPull(){
+        if(noMorePulls) {
+
+        } else {
+            try {
+                final int listsOldSize = friendList.size() - 1;
+                Query AnotherQuery = FirebaseDatabase.getInstance().getReference()
+                        .child("requests").child(myuid).orderByChild("name").startAt(friendList.get(listsOldSize).getName()).limitToFirst(7);
+
+                AnotherQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            friend = (new Friends(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class),  userSnapshot.child("uid").getValue(String.class)));
+                            Log.d(TAG, "NEW LISTS" + friend.getName());
+                            friendList.add(friend);
+                        }
+                        if (friendList.size() % 7 != 0 || dataSnapshot.getChildrenCount() == 0L) {
+                            noMorePulls = true;
+                        }
+
+                        if(dataSnapshot.getChildrenCount() != 0L) {
+                            friendList.remove(listsOldSize);
+                        }
+
+                        Log.e(TAG, "Log this itram range inserted " + String.valueOf(listsOldSize) + " " + String.valueOf(friendList.size() - 1));
+                        friendRequestAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+            } catch (com.google.firebase.database.DatabaseException e) {
+                e.printStackTrace();
+                //removeLoading();
+            }
+        }
     }
 
     private void removeRequest(boolean accept, String uid, String name, String url) {
@@ -139,7 +198,7 @@ public class FriendRequestFragment extends Fragment implements View.OnClickListe
                     String key = postsnapshot.getKey();
                     dataSnapshot.getRef().removeValue();
 
-                    FancyToast.makeText(getActivity(), "REQUEST ACCEPTED!", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
+                    FancyToast.makeText(getActivity(), "REQUEST ACCEPTED!", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
 
                 }
             }
@@ -148,7 +207,7 @@ public class FriendRequestFragment extends Fragment implements View.OnClickListe
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 databaseError.getCode();
 
-                FancyToast.makeText(getActivity(), "ERROR !", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                FancyToast.makeText(getActivity(), "ERROR !", FancyToast.LENGTH_LONG, FancyToast.INFO, false).show();
             }
         });
 
@@ -160,13 +219,13 @@ public class FriendRequestFragment extends Fragment implements View.OnClickListe
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         try {
-                            FancyToast.makeText(getActivity(), "REQUEST ACCEPTED !", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
+                            FancyToast.makeText(getActivity(), "REQUEST ACCEPTED !", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                         } catch (NullPointerException e) {
                             e.printStackTrace();
                         }
                     } else {
                         try {
-                            FancyToast.makeText(getActivity(), "ERROR ACCEPTING REQUEST !", FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
+                            FancyToast.makeText(getActivity(), "ERROR ACCEPTING REQUEST !", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                         } catch (NullPointerException e) {
                             e.printStackTrace();
                         }
@@ -175,7 +234,7 @@ public class FriendRequestFragment extends Fragment implements View.OnClickListe
                 }
             });
         } else {
-            FancyToast.makeText(getActivity(), "REQUEST REJECTED !", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+            FancyToast.makeText(getActivity(), "REQUEST REJECTED !", FancyToast.LENGTH_LONG, FancyToast.INFO, false).show();
         }
     }
 

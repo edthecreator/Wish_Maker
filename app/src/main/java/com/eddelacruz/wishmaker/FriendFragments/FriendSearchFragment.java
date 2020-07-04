@@ -24,6 +24,7 @@ import com.eddelacruz.wishmaker.MainActivity;
 import com.eddelacruz.wishmaker.Managers.DataManager;
 import com.eddelacruz.wishmaker.Managers.TransactionNameAndFragmentTag;
 import com.eddelacruz.wishmaker.Models.Friends;
+import com.eddelacruz.wishmaker.Models.Lists;
 import com.eddelacruz.wishmaker.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -50,6 +51,8 @@ public class FriendSearchFragment extends Fragment implements View.OnClickListen
     private SearchUsers friendsAdapter;
     private RecyclerView recyclerView;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    boolean noMorePulls = false;
+    private String gSearchName = "";
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -88,6 +91,7 @@ public class FriendSearchFragment extends Fragment implements View.OnClickListen
                     friendsAdapter.notifyDataSetChanged();
                 }
                 final String searchName = friendSearch.getText().toString().toLowerCase();
+                gSearchName = searchName;
                 setUpLoading();
                 friendSearch(searchName);
                 break;
@@ -129,6 +133,47 @@ public class FriendSearchFragment extends Fragment implements View.OnClickListen
 
     }
 
+
+    private void anotherPull(String searchName){
+        if(noMorePulls) {
+
+        } else {
+            try {
+                final int listsOldSize = friendList.size() - 1;
+                Query AnotherQuery = FirebaseDatabase.getInstance().getReference()
+                        .child("users").orderByChild("name").equalTo(searchName).startAt(friendList.get(listsOldSize).getName()).limitToFirst(7);
+
+                AnotherQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            friendRow = (new Friends(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class),  userSnapshot.child("uid").getValue(String.class)));
+                            friendList.add(friendRow);
+                        }
+                        if (friendList.size() % 7 != 0 || dataSnapshot.getChildrenCount() == 0L) {
+                            noMorePulls = true;
+                        }
+
+                        if(dataSnapshot.getChildrenCount() != 0L) {
+                            friendList.remove(listsOldSize);
+                        }
+
+                        Log.e(TAG, "Log this itram range inserted " + String.valueOf(listsOldSize) + " " + String.valueOf(friendList.size() - 1));
+                        friendsAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+            } catch (com.google.firebase.database.DatabaseException e) {
+                e.printStackTrace();
+                //removeLoading();
+            }
+        }
+    }
+
     public void setupAdapter(ArrayList<Friends> friends) {
         friendsAdapter = new SearchUsers(this.getContext(), friends);
         recyclerView.setLayoutManager((RecyclerView.LayoutManager) new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
@@ -140,6 +185,18 @@ public class FriendSearchFragment extends Fragment implements View.OnClickListen
                     sendRequest(uid, name, url);
                 } catch (NullPointerException e) {
                     e.printStackTrace();
+                }
+            }
+        });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                    anotherPull(gSearchName);
+                    Log.d("-----","end");
+
                 }
             }
         });
@@ -156,7 +213,7 @@ public class FriendSearchFragment extends Fragment implements View.OnClickListen
                 if (task.isSuccessful()) {
                     try {
                         removeLoading();
-                        FancyToast.makeText(getActivity(), "REQUEST SENT !", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
+                        FancyToast.makeText(getActivity(), "REQUEST SENT !", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }

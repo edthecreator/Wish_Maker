@@ -32,6 +32,8 @@ import com.eddelacruz.wishmaker.Managers.TransactionNameAndFragmentTag;
 import com.eddelacruz.wishmaker.Models.Currency;
 import com.eddelacruz.wishmaker.Models.User;
 import com.eddelacruz.wishmaker.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -73,10 +75,12 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
         backArrow = rootView.findViewById(R.id.backArrow);
         recyclerView = rootView.findViewById(R.id.recyclerViewCurrency);
 
-        currencyArrayList.add(new Currency(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_emoji_emotions_24px), "Excited"));
-        currencyArrayList.add(new Currency(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_sentiment_dissatisfied_24px), "Sad"));
-        currencyArrayList.add(new Currency(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_sentiment_satisfied_alt_24px), "Happy"));
-        setUpAdapter(currencyArrayList);
+
+        currencyArrayList.add(new Currency(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_sentiment_satisfied_alt_24px_1), "Happy"));
+        currencyArrayList.add(new Currency(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_sentiment_very_satisfied_24px_1), "Excited"));
+        currencyArrayList.add(new Currency(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_sentiment_dissatisfied_24px_1), "Sad"));
+        currencyArrayList.add(new Currency(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_sentiment_very_dissatisfied_24px), "Lazy"));
+        setUpAdapter();
 
 
         backArrow.setOnClickListener(this);
@@ -105,22 +109,29 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
         list_ref.push().setValue(stSwitch);
     }
 
-    private void setUpAdapter (ArrayList<Currency> currencyArrayList) {
-        currencyAdapter = new CurrencyAdapter(this.getContext(), currencyArrayList);
+
+    private void setUpAdapter () {
+        currencyAdapter = new CurrencyAdapter(currencyArrayList);
         recyclerView.setLayoutManager((RecyclerView.LayoutManager) new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         currencyAdapter.setOnItemClickListener(new CurrencyAdapter.onRecyclerViewItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position, final Drawable symbol, final String name) {
                 try {
-
                     DataManager.getInstance().getUser().setstatus(name);
                     currencyAdapter.notifyItemChanged(position);
                    //Log.e(TAG, "KEY" + list_ref.child("").getKey().toString());
 
-                    query = FirebaseDatabase.getInstance().getReference()
-                            .child("users").child(uid).limitToFirst(1);
+                    if(DataManager.getInstance().getSettings().getSearchable()) {
+                        query = FirebaseDatabase.getInstance().getReference()
+                                .child("users").child(uid).limitToFirst(1);
 
-                    Log.d(TAG, "User Query : " + uid);
+                    }
+                    else {
+                        query = FirebaseDatabase.getInstance().getReference()
+                                .child("private_users").child(uid).limitToFirst(1);
+                    }
+
+                    Log.d(TAG, "User Query : " + uid + "Name : " + name);
 
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -128,11 +139,29 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
                             for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                                 Map<String, Object> currency = new HashMap<String, Object>();;
                                 currency.put("status", name);
-
                                 final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                final DatabaseReference list_ref = database.getReference("users/" + uid).child(userSnapshot.getKey());
 
-                                list_ref.updateChildren(currency);
+                                DatabaseReference list_ref;
+                                if(DataManager.getInstance().getSettings().getSearchable()) {
+                                    list_ref = database.getReference("users/" + uid).child(userSnapshot.getKey());
+
+                                }
+                                else {
+                                    list_ref = database.getReference("private_users/" + uid).child(userSnapshot.getKey());
+                                }
+
+                                Log.d(TAG, "userSnapshot : " + userSnapshot.getKey());
+
+                                list_ref.updateChildren(currency).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful())
+                                            Log.d(TAG, "FAILURE");
+                                        else {
+                                            Log.d(TAG, "SUCCESS");
+                                        }
+                                    }
+                                });
 
                             }
                         }

@@ -95,13 +95,14 @@ public class MainActivity extends AppCompatActivity {
         //navView.setItemTextColor(ColorStateList.valueOf(Color.BLUE));
 
 
+
         navView = findViewById(R.id.nav_view);
         viewPager = findViewById(R.id.viewpager);
         viewPagerSetup();
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        //DataManager.getInstance().setUserId(auth.getUid());
+        DataManager.getInstance().setUserId(auth.getUid());
 
         //dbHelper = new DatabaseHelper(this);
         //db = dbHelper.getReadableDatabase();
@@ -359,6 +360,9 @@ public class MainActivity extends AppCompatActivity {
     //sign out method
     public void signOut() {
         auth.signOut();
+        DataManager.getInstance().setUser(null);
+        DataManager.getInstance().setSettings(null);
+        DataManager.getInstance().setUserId(null);
     }
 
 
@@ -415,128 +419,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    /*
-    @Override
-    public void onBackPressed() {
-        switch (bottomNav.getSelectedItemId()) {
-            case R.id.navigation_shop:
-                if (getSupportFragmentManager().findFragmentByTag("productDetail") != null
-                        && getSupportFragmentManager().findFragmentByTag("productDetail").isVisible()) {
-                    getSupportFragmentManager().popBackStack("productDetail", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-
-                else if (getSupportFragmentManager().findFragmentByTag("product") != null
-                        && getSupportFragmentManager().findFragmentByTag("product").isVisible()) {
-                    getSupportFragmentManager().popBackStack("product", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-                break;
-
-            case R.id.navigation_status:
-                if (getSupportFragmentManager().findFragmentByTag("map") != null
-                        && getSupportFragmentManager().findFragmentByTag("map").isVisible()) {
-                    getSupportFragmentManager().popBackStack("map", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-                else if (getSupportFragmentManager().findFragmentByTag("contacts") != null
-                        && getSupportFragmentManager().findFragmentByTag("contacts").isVisible()) {
-                    sendAddress="";
-                    getSupportFragmentManager().popBackStack("contacts", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-
-                else if (getSupportFragmentManager().findFragmentByTag("doodle") != null
-                        && getSupportFragmentManager().findFragmentByTag("doodle").isVisible()) {
-                    if (fragments.contains("orderDoodle")) {
-                        fragments.remove("orderDoodle");
-                        getSupportFragmentManager().popBackStack("doodle", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    }
-                }
-                break;
-
-            case R.id.navigation_account:
-                if (getSupportFragmentManager().findFragmentByTag("forgot") != null) {
-                    getSupportFragmentManager().popBackStack("forgot", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-
-                else if (getSupportFragmentManager().findFragmentByTag("name") != null) {
-                    getSupportFragmentManager().popBackStack("name", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-
-                else if (getSupportFragmentManager().findFragmentByTag("email") != null) {
-                    getSupportFragmentManager().popBackStack("email", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-
-                else if (getSupportFragmentManager().findFragmentByTag("password") != null) {
-                    getSupportFragmentManager().popBackStack("password", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-
-                else if (getSupportFragmentManager().findFragmentByTag("sms") != null) {
-                    getSupportFragmentManager().popBackStack("sms", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-
-                else if (getSupportFragmentManager().findFragmentByTag("phone") != null) {
-                    getSupportFragmentManager().popBackStack("phone", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-
-                if (getSupportFragmentManager().findFragmentByTag("profile") != null
-            && getSupportFragmentManager().findFragmentByTag("profile").isVisible()) {
-        getSupportFragmentManager().popBackStack("profile", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    }
-
-
-                else if (getSupportFragmentManager().findFragmentByTag("card") != null
-            && getSupportFragmentManager().findFragmentByTag("card").isVisible()) {
-        if (fragments.contains("orderCard")) {
-            fragments.remove("orderCard");
-            bottomNav.setSelectedItemId(R.id.navigation_status);
-        }
-
-        getSupportFragmentManager().popBackStack("card", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-    }
-                break;
-}
-    }
-
-    bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_shop:
-                        mViewPager.setCurrentItem(0);
-
-                        if (prevTab ==  R.id.navigation_shop) {
-                            getSupportFragmentManager().popBackStack("product", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                        }
-                        break;
-
-                    case R.id.navigation_status:
-                        mViewPager.setCurrentItem(1);
-                        break;
-
-                    case R.id.navigation_account:
-                        mViewPager.setCurrentItem(2);
-
-                        if (prevTab == R.id.navigation_account) {
-                            if (getSupportFragmentManager().findFragmentByTag("profile") != null) {
-                                getSupportFragmentManager().popBackStack("profile", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                            }
-
-                            else if (getSupportFragmentManager().findFragmentByTag("card") != null) {
-                                if (fragments.contains("orderCard")) {
-                                    fragments.remove("orderCard");
-                                }
-
-                                getSupportFragmentManager().popBackStack("card", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                            }
-                        }
-                        break;
-                }
-                prevTab = item.getItemId();
-                Log.d("HELLO", Integer.toString(prevTab));
-                return true;
-            }
-        });
-     */
 
 
 }

@@ -19,21 +19,27 @@
 
             >
         </activity>
-        <activity android:name=".AuthenticationActivities.SignUp" >
-        </activity>
-        <activity android:name=".AuthenticationActivities.GetUpdate" >
-        </activity>
-        <activity android:name=".AuthenticationActivities.SplashScreen" >
+        <activity android:name=".AuthenticationActivities.SignUp"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AuthenticationActivities.GetUpdate"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AuthenticationActivities.SplashScreen"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AuthenticationActivities.Login" >
-        </activity>
-        <activity android:name=".AuthenticationActivities.PasswordReset" >
-        </activity>
+        <activity android:name=".AuthenticationActivities.Login"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AuthenticationActivities.PasswordReset"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
 
     </application>
 

@@ -58,6 +58,7 @@ public class WishlistMainFragment extends Fragment implements View.OnClickListen
     ArrayList<Lists> listsArrayList = new ArrayList<>();
     ListsAdapter listsAdapter;
     boolean regularmode = true;
+    boolean noMorePulls = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -81,14 +82,19 @@ public class WishlistMainFragment extends Fragment implements View.OnClickListen
 
     private void firebasecall() {
         query = FirebaseDatabase.getInstance().getReference().child("wishlist")
-                .child(uid).limitToFirst(7);
+                .child(uid).orderByChild("created_at").limitToFirst(7);
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    lists = (new Lists(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class)));
+                    lists = (new Lists(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class), userSnapshot.child("created_at").getValue(Long.class)));
                     listsArrayList.add(lists);
+                }
+
+                if(listsArrayList.size() < 7) {
+                    Log.d(TAG, "NO MORE PULLS CALLED" + listsArrayList.size());
+                    noMorePulls = true;
                 }
 
                 setupAdapter();
@@ -103,6 +109,48 @@ public class WishlistMainFragment extends Fragment implements View.OnClickListen
     }
 
 
+    private void anotherPull(){
+        if(noMorePulls) {
+
+        } else {
+            try {
+                final int listsOldSize = listsArrayList.size() - 1;
+                Query AnotherQuery = FirebaseDatabase.getInstance().getReference().child("wishlist")
+                        .child(uid).orderByChild("created_at").startAt(listsArrayList.get(listsArrayList.size() - 1).getCreated_at()).limitToFirst(7);
+
+                AnotherQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                lists = (new Lists(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class), userSnapshot.child("created_at").getValue(Long.class)));
+                                Log.d(TAG, "NEW LISTS" + lists.getName());
+                                listsArrayList.add(lists);
+                        }
+                        if (listsArrayList.size() % 7 != 0 || dataSnapshot.getChildrenCount() == 0L) {
+                            noMorePulls = true;
+                        }
+
+                        if(dataSnapshot.getChildrenCount() != 0L) {
+                            listsArrayList.remove(listsOldSize);
+                        }
+
+                        Log.e(TAG, "Log this itram range inserted " + String.valueOf(listsOldSize) + " " + String.valueOf(listsArrayList.size() - 1));
+                        listsAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+            } catch (com.google.firebase.database.DatabaseException e) {
+                e.printStackTrace();
+                //removeLoading();
+            }
+        }
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -111,7 +159,7 @@ public class WishlistMainFragment extends Fragment implements View.OnClickListen
                     regularMode();
                 }
                 try {
-                    AddList addList = new AddList();
+                    AddList addList = new AddList(this);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -183,6 +231,18 @@ public class WishlistMainFragment extends Fragment implements View.OnClickListen
                 }
             }
         });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                    anotherPull();
+                    Log.d("-----","end");
+
+                }
+            }
+        });
         recyclerView.setAdapter(listsAdapter);
     }
 
@@ -203,7 +263,7 @@ public class WishlistMainFragment extends Fragment implements View.OnClickListen
 
     private void deleteItemNode(String name) {
         Query queryList = FirebaseDatabase.getInstance().getReference().child("wishlist")
-                .child(uid).orderByChild("name").equalTo(name).limitToFirst(1);
+                .child(uid).orderByChild("created_at").equalTo(name).limitToFirst(1);
 
         Query queryGift = FirebaseDatabase.getInstance().getReference().child("gifts")
                 .child(uid).child(name);

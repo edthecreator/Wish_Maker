@@ -78,7 +78,7 @@ public class SignUp extends AppCompatActivity {
                 if (TextUtils.isEmpty(email)) {
                     try {
                         hideKeyboard(getParent());
-                        FancyToast.makeText(getBaseContext(),"Enter your email !",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                        FancyToast.makeText(getBaseContext(),"Enter your email !",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
@@ -88,7 +88,7 @@ public class SignUp extends AppCompatActivity {
                 if (TextUtils.isEmpty(password)) {
                     try {
                         hideKeyboard(getParent());
-                        FancyToast.makeText(getBaseContext(),"Enter your password !",FancyToast.LENGTH_LONG, FancyToast.ERROR,true).show();
+                        FancyToast.makeText(getBaseContext(),"Enter your password !",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
@@ -98,7 +98,7 @@ public class SignUp extends AppCompatActivity {
                 if (password.length() < 6) {
                     try {
                         hideKeyboard(getParent());
-                        FancyToast.makeText(getBaseContext(),"PASSWORD TOO SHORT. PLEASE INPUT A PASSWORD AT LEAST 6 CHARACTERS LONG !",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                        FancyToast.makeText(getBaseContext(),"PASSWORD TOO SHORT. PLEASE INPUT A PASSWORD AT LEAST 6 CHARACTERS LONG !",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }

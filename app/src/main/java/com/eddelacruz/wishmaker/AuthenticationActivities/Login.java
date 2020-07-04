@@ -100,7 +100,7 @@ public class Login extends AppCompatActivity {
                 final String password = inputPassword.getText().toString();
                 if (TextUtils.isEmpty(email)) {
                     try {
-                        FancyToast.makeText(getParent(),"Please Input Email !",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                        FancyToast.makeText(getParent(),"Please Input Email !",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
@@ -110,7 +110,7 @@ public class Login extends AppCompatActivity {
                 if (TextUtils.isEmpty(password)) {
                     try {
                         hideKeyboard(getParent());
-                        FancyToast.makeText(getParent(),"Please Input Password !",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                        FancyToast.makeText(getParent(),"Please Input Password !",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
@@ -136,18 +136,18 @@ public class Login extends AppCompatActivity {
                                     // signed in user can be handled in the listener.
 
                                        if(task.isSuccessful()) {
-                                           Log.e(TAG, "REMOVE LOAD");
-                                           removeLoading();
+                                           Log.e(TAG, "REMOVE LOAD 1");
+                                           //removeLoading();
                                            Intent intent = new Intent(Login.this, MainActivity.class);
                                            startActivity(intent);
                                            finish();
                                        } else {
-                                           Log.e(TAG, "REMOVE LOAD");
+                                           Log.e(TAG, "REMOVE LOAD 2");
                                            removeLoading();
                                            if (password.length() < 6) {
                                                inputPassword.setError(getString(R.string.minimum_password));
                                            } else {
-                                              // FancyToast.makeText(getParent(), "Authentication Failed !", FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
+                                               FancyToast.makeText(getApplicationContext(), "ERROR !", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                                            }
                                        }
                                 }

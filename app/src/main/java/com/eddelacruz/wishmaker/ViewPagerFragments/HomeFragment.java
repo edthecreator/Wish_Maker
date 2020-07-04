@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.opengl.GLDebugHelper;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -33,6 +35,7 @@ import com.eddelacruz.wishmaker.FriendFragments.FriendsFragment;
 import com.eddelacruz.wishmaker.MainActivity;
 import com.eddelacruz.wishmaker.Managers.DataManager;
 import com.eddelacruz.wishmaker.Managers.TransactionNameAndFragmentTag;
+import com.eddelacruz.wishmaker.Models.Settings;
 import com.eddelacruz.wishmaker.Models.User;
 import com.eddelacruz.wishmaker.R;
 import com.eddelacruz.wishmaker.RootFragments.FirstTabRootFragment;
@@ -64,7 +67,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private static String TAG = "HOME FRAGMENT";
 
     private final int GET_FROM_GALLERY = 3;
-    private ImageView friends, settings;
+    private ImageView friends, settings, statusIcon;
     private TextView name, logout;
     private CircleImageView profile;
     private Button upload_image;
@@ -96,6 +99,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         profile = rootView.findViewById(R.id.profile_image);
         upload_image = rootView.findViewById(R.id.upload_image);
         name = rootView.findViewById(R.id.name);
+        statusIcon = rootView.findViewById(R.id.statusIcon);
         //logout = rootView.findViewById(R.id.logout);
 
         //        logout.setOnClickListener(this);
@@ -106,7 +110,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         upload_image.setOnClickListener(this);
 
         //pullFromSQLite(db);
-        firebaseCall();
+        initialSettingsCall();
+        //firebaseCall();
     }
 
     @Override
@@ -221,9 +226,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     } */
 
-    private void firebaseCall() {
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Log.d(TAG, "ON RESUME HOME");
+        if(DataManager.getInstance().getUser() != null)
+        setStatus();
+    }
+
+    private void setStatus() {
+        try {
+            String status = DataManager.getInstance().getUser().getstatus();
+            if (status.equals("Happy"))
+                statusIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_sentiment_satisfied_alt_24px_1));
+            else if (status.equals("Excited"))
+                statusIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_sentiment_very_satisfied_24px_1));
+            else if (status.equals("Sad"))
+                statusIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_sentiment_dissatisfied_24px_1));
+            else if (status.equals("Lazy"))
+                statusIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_sentiment_very_dissatisfied_24px));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void firebaseCall(String que) {
+
             query = FirebaseDatabase.getInstance().getReference()
-                    .child("users").child(uid).limitToFirst(1);
+                    .child(que).child(uid).limitToFirst(1);
 
             Log.d(TAG, "User Query : " + uid);
 
@@ -235,10 +266,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                            final User user2 = (new User(userSnapshot.child("image").getValue(String.class), userSnapshot.child("firstName").getValue(String.class), userSnapshot.child("lastName").getValue(String.class), userSnapshot.child("uid").getValue(String.class), userSnapshot.child("currency").getValue(String.class)));
+                            final User user2 = (new User(userSnapshot.child("image").getValue(String.class), userSnapshot.child("firstName").getValue(String.class), userSnapshot.child("lastName").getValue(String.class), userSnapshot.child("uid").getValue(String.class), userSnapshot.child("status").getValue(String.class)));
                             Log.d(TAG, "User initialized with " + user2.getFirstName() + " imagelink : ");
 
                             DataManager.getInstance().setUser(user2);
+
+                            setStatus();
                             initializeData(user2, false);
                         /*
                         Glide.with(getContext())
@@ -271,9 +304,38 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         }
 
+    private void initialSettingsCall() {
+        query = FirebaseDatabase.getInstance().getReference()
+                .child("settings").child(uid).limitToFirst(1);
 
+        Log.d(TAG, "User Query : " + uid);
 
-        private void initializeData(User user, boolean dbPull) {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    try {
+                        Settings newSettings = new Settings(userSnapshot.child("searchable").getValue(Boolean.class), userSnapshot.child("last_date_changed").getValue(Long.class));
+                        DataManager.getInstance().setSettings(newSettings);
+
+                        if(newSettings.getSearchable()) {
+                            firebaseCall("users");
+                        } else {
+                            firebaseCall("private_users");
+                        }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void initializeData(User user, boolean dbPull) {
 
             try {
                 Log.d(TAG, "CHECK IMAGE" + user.getImage());
@@ -337,8 +399,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void addImageNode(final Uri uri) {
         final String uid = DataManager.getInstance().getUserId();
-        query = FirebaseDatabase.getInstance().getReference()
-                .child("users").child(uid).limitToFirst(1);
+
+        if(DataManager.getInstance().getSettings().getSearchable()) {
+            query = FirebaseDatabase.getInstance().getReference()
+                    .child("users").child(uid).limitToFirst(1);
+        } else {
+            query = FirebaseDatabase.getInstance().getReference()
+                    .child("private_users").child(uid).limitToFirst(1);
+        }
 
         Log.d(TAG, "User Query : " + uid);
 
@@ -349,10 +417,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     Map<String, Object> image = new HashMap<String, Object>();;
                     image.put("image", uri.toString());
 
-                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    final DatabaseReference list_ref = database.getReference("users/" + uid).child(userSnapshot.getKey());
 
-                    list_ref.updateChildren(image);
+                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference list_ref;
+
+                    if(DataManager.getInstance().getSettings().getSearchable()) {
+                        list_ref = database.getReference("users/" + uid).child(userSnapshot.getKey());
+                        list_ref.updateChildren(image);
+                    } else {
+                        list_ref = database.getReference("private_users/" + uid).child(userSnapshot.getKey());
+                        list_ref.updateChildren(image);
+                    }
+
 
                 }
             }

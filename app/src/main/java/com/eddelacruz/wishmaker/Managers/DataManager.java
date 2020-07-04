@@ -1,6 +1,7 @@
 package com.eddelacruz.wishmaker.Managers;
 
 
+import com.eddelacruz.wishmaker.Models.Settings;
 import com.eddelacruz.wishmaker.Models.User;
 
 import java.util.ArrayList;
@@ -13,8 +14,9 @@ public class DataManager {
     private final String TAG = "DATA MANAGER";
 
     private ArrayList<String> fragments;
-    private String UserId = "i8NtwVZJKSW0jRMYMOxLTDvEfzs1";
+    private String UserId;
     private User user;
+    private Settings settings;
 
 
     private DataManager(){
@@ -36,6 +38,10 @@ public class DataManager {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public Settings getSettings() { return settings; }
+
+    public void setSettings(Settings settings) { this.settings = settings; }
 
     public void setUserId(String userId) {
         this.UserId = userId;

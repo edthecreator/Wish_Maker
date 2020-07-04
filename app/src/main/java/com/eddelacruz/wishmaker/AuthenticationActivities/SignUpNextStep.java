@@ -24,6 +24,7 @@ import com.eddelacruz.wishmaker.LoadingFragments.LoadingFragment;
 import com.eddelacruz.wishmaker.MainActivity;
 import com.eddelacruz.wishmaker.Managers.DataManager;
 import com.eddelacruz.wishmaker.Managers.TransactionNameAndFragmentTag;
+import com.eddelacruz.wishmaker.Models.NewUser;
 import com.eddelacruz.wishmaker.Models.Settings;
 import com.eddelacruz.wishmaker.Models.Tracking;
 import com.eddelacruz.wishmaker.Models.User;
@@ -98,8 +99,9 @@ public class SignUpNextStep extends Fragment implements View.OnClickListener {
                 addUserToDatabase(firstName, lastName);
             } else {
                 try {
+                    removeLoading();
                     hideKeyboard(getActivity());
-                    FancyToast.makeText(getActivity(),"PLEASE FILL ALL REQUIRED FIELDS !",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                    FancyToast.makeText(getActivity(),"PLEASE FILL ALL REQUIRED FIELDS !",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -142,15 +144,15 @@ public class SignUpNextStep extends Fragment implements View.OnClickListener {
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(getContext(), "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getContext(), "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "CREATE USER DB FINALIZATION");
-                        removeLoading();
+                        //removeLoading();
                         FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                         try {
                             long current = System.currentTimeMillis();
-                            final User user = new User(email,lastName.toLowerCase(), firstName.toLowerCase(), currentFirebaseUser.getUid(), "happy", current);
+                            final NewUser user = new NewUser(email, "", lastName.toLowerCase(), firstName.toLowerCase(), currentFirebaseUser.getUid(), "Happy", current, firstName.toLowerCase() + " " + lastName.toLowerCase());
                             final Tracking tracking = new Tracking(currentFirebaseUser.getUid(), current, "Y", "Y", "Y");
-                            final Settings settings = new Settings(currentFirebaseUser.getUid(),true);
+                            final Settings settings = new Settings(currentFirebaseUser.getUid(),true, current);
                             FirebaseDatabase.getInstance().getReference("users").child(currentFirebaseUser.getUid()).push().setValue(user);
                             FirebaseDatabase.getInstance().getReference("tracking").child(currentFirebaseUser.getUid()).push().setValue(tracking);
                             FirebaseDatabase.getInstance().getReference("settings").child(currentFirebaseUser.getUid()).push().setValue(settings);
@@ -162,7 +164,8 @@ public class SignUpNextStep extends Fragment implements View.OnClickListener {
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             try {
-                                FancyToast.makeText(getActivity(),"An error occured. Please try again !",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                                removeLoading();
+                                FancyToast.makeText(getActivity(),"An error occured. Please try again !",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
                             }

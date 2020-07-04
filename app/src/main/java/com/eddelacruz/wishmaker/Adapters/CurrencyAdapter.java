@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,6 +21,7 @@ import com.eddelacruz.wishmaker.Managers.DataManager;
 import com.eddelacruz.wishmaker.Models.Currency;
 import com.eddelacruz.wishmaker.Models.Friends;
 import com.eddelacruz.wishmaker.R;
+import com.eddelacruz.wishmaker.SettingsFragments.StatusFragment;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingDeque;
@@ -32,13 +34,14 @@ public class CurrencyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     // private FriendRequestFragment friendRequestFragment;
     private ArrayList<Currency> friendsList = new ArrayList<>();
     private CurrencyAdapter.onRecyclerViewItemClickListener mItemClickListener;
+    //private StatusFragment statusFragment;
 
     public CurrencyAdapter() { }
 
-    public CurrencyAdapter(Context context, ArrayList<Currency> list) {
+    public CurrencyAdapter(ArrayList<Currency> list) {
         this.friendsList = list;
-        this.context = context;
-        // this.friendRequestFragment = (FriendRequestFragment) friendrequestfragment;
+        //this.context = context;
+        //this.statusFragment = (StatusFragment) statusFragment;
     }
 
     @NonNull
@@ -54,8 +57,12 @@ public class CurrencyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             try {
                 CurrencyAdapter.RequestViewHolder v = (CurrencyAdapter.RequestViewHolder) holder;
                 Currency fpos = friendsList.get(position);
+
                 v.currencyIcon.setImageDrawable(fpos.getSymbol());
+                Log.d(TAG, "CURRENCY ICON" + fpos.getSymbol());
                 v.currencyName.setText(fpos.getName());
+
+
 
                 if(fpos.getName().equals(DataManager.getInstance().getUser().getstatus()))
                     v.checkImage.setVisibility(View.VISIBLE);

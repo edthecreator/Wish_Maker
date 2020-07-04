@@ -24,6 +24,7 @@ import com.eddelacruz.wishmaker.AddScreens.AddGifts;
 import com.eddelacruz.wishmaker.LoadingFragments.LoadingFragment;
 import com.eddelacruz.wishmaker.Managers.DataManager;
 import com.eddelacruz.wishmaker.Managers.TransactionNameAndFragmentTag;
+import com.eddelacruz.wishmaker.Models.Lists;
 import com.eddelacruz.wishmaker.Models.Wishes;
 import com.eddelacruz.wishmaker.R;
 import com.google.firebase.database.DataSnapshot;
@@ -51,6 +52,7 @@ public class GiftListsFragment extends Fragment implements View.OnClickListener 
     WishAdapter wishAdapter;
     String name = "";
     boolean regularmode = true;
+    boolean noMorePulls = false;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -79,13 +81,13 @@ public class GiftListsFragment extends Fragment implements View.OnClickListener 
     }
     private void firebasecall() {
         query = FirebaseDatabase.getInstance().getReference().child("gifts")
-                .child(uid).child(name).orderByChild("name").limitToFirst(7);
+                .child(uid).child(name).orderByChild("created_at").limitToFirst(7);
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    wishes = (new Wishes(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class),userSnapshot.child("price").getValue(Double.class), userSnapshot.child("link").getValue(String.class)));
+                    wishes = (new Wishes(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class),userSnapshot.child("price").getValue(Double.class), userSnapshot.child("link").getValue(String.class), userSnapshot.child("created_at").getValue(Long.class)));
                     wishesArrayList.add(wishes);
                 }
 
@@ -204,7 +206,59 @@ public class GiftListsFragment extends Fragment implements View.OnClickListener 
                 }
             }
         });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                    anotherPull();
+                    Log.d("-----","end");
+
+                }
+            }
+        });
         recyclerView.setAdapter(wishAdapter);
+    }
+
+    private void anotherPull(){
+        if(noMorePulls) {
+
+        } else {
+            try {
+                final int listsOldSize = wishesArrayList.size() - 1;
+                Query AnotherQuery = FirebaseDatabase.getInstance().getReference().child("wishlist")
+                        .child(uid).child(name).orderByChild("created_at").startAt(wishesArrayList.get(wishesArrayList.size() - 1).getCreated_At()).limitToFirst(7);
+
+                AnotherQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            wishes = (new Wishes(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class),userSnapshot.child("price").getValue(Double.class), userSnapshot.child("link").getValue(String.class), userSnapshot.child("created_at").getValue(Long.class)));
+                            wishesArrayList.add(wishes);
+                        }
+                        if (wishesArrayList.size() % 7 != 0 || dataSnapshot.getChildrenCount() == 0L) {
+                            noMorePulls = true;
+                        }
+
+                        if(dataSnapshot.getChildrenCount() != 0L) {
+                            wishesArrayList.remove(listsOldSize);
+                        }
+
+                        Log.e(TAG, "Log this itram range inserted " + String.valueOf(listsOldSize) + " " + String.valueOf(wishesArrayList.size() - 1));
+                        wishAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+            } catch (com.google.firebase.database.DatabaseException e) {
+                e.printStackTrace();
+                //removeLoading();
+            }
+        }
     }
 
     private void setUpLoading() {

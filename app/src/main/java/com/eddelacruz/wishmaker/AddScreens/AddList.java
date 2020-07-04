@@ -53,7 +53,7 @@ public class AddList extends Fragment implements View.OnClickListener {
     private ImageView cameraIcon, listimage;
     private Bitmap bitmap = null;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private String uid = DataManager.getInstance().getUserId();
+    private String uid = DataManager.getInstance().getUser().getUid();
     private final DatabaseReference list_ref = database.getReference("wishlist/" + uid);
     private WishlistMainFragment wishlistMainFragment;
 
@@ -95,10 +95,10 @@ public class AddList extends Fragment implements View.OnClickListener {
                 try {
                 if(listname.getText() != null && !listname.getText().toString().equals("")) {
                     String uploadName = String.valueOf(listname.getText());
-                    uploadFile(bitmap, uploadName);
+                    uploadFile(bitmap, uploadName, System.currentTimeMillis());
                 } else {
                     try {
-                        FancyToast.makeText(getActivity(),"Please Input Name !",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                        FancyToast.makeText(getActivity(),"Please Input Name !",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
@@ -145,7 +145,7 @@ public class AddList extends Fragment implements View.OnClickListener {
 
     }
 
-    private void uploadFile(Bitmap bitmap, final String name) {
+    private void uploadFile(Bitmap bitmap, final String name, final Long created_at) {
         String myFolder = DataManager.getInstance().getUserId();
         if (bitmap != null) {
             try {
@@ -161,7 +161,7 @@ public class AddList extends Fragment implements View.OnClickListener {
                     public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                         if (!task.isSuccessful()) {
                             Log.e(TAG, "FALURE AT BEGINNING OF UPLOAD TASK");
-                            FancyToast.makeText(getActivity(),"FAILURE UPLOADING IMAGE !",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                            FancyToast.makeText(getActivity(),"FAILURE UPLOADING IMAGE !",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                             throw task.getException();
                         }
 
@@ -172,9 +172,9 @@ public class AddList extends Fragment implements View.OnClickListener {
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
                             Uri downloadUri = task.getResult();
-                            createNewList(downloadUri, name);
+                            createNewList(downloadUri, name, created_at);
                         } else {
-                            FancyToast.makeText(getActivity(),"FAILURE COMPLETING TASK !",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                            FancyToast.makeText(getActivity(),"FAILURE COMPLETING TASK !",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                         }
                     }
                 });
@@ -182,20 +182,20 @@ public class AddList extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
             }
         } else {
-            createNewList(null, name);
+            createNewList(null, name, created_at);
         }
     }
 
-    private void createNewList(Uri list_uri, String list_name) {
+    private void createNewList(Uri list_uri, String list_name, Long created_at) {
         String listUrl = "";
         if(list_uri != null)
             listUrl = String.valueOf(list_uri);
 
-        wishlistMainFragment.addItemtoAdapter(new Lists(String.valueOf(listUrl), list_name));
+        wishlistMainFragment.addItemtoAdapter(new Lists(String.valueOf(listUrl), list_name, created_at));
 
-        list_ref.push().setValue(new Lists(String.valueOf(listUrl), list_name));
+        list_ref.push().setValue(new Lists(String.valueOf(listUrl), list_name, created_at));
         try {
-            FancyToast.makeText(getActivity(),"Successfully created new List !",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
+            FancyToast.makeText(getActivity(),"Successfully created new List !",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
             getFragmentManager().popBackStack(TransactionNameAndFragmentTag.AddListFragment,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE);
         } catch (NullPointerException e) {

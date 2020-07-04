@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -54,12 +55,12 @@ public class PasswordReset extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String email = inputEmail.getText().toString().trim();
+                final String email = inputEmail.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
                     try {
                         hideKeyboard(getParent());
-                        FancyToast.makeText(getParent(),"Enter your email associated with your account !",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                        FancyToast.makeText(getParent(),"Enter your email associated with your account !",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
@@ -72,15 +73,24 @@ public class PasswordReset extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     try {
+                                        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Log.d("TAG", "Email sent.");
+                                                        }
+                                                    }
+                                                });
                                         hideKeyboard(getParent());
-                                        FancyToast.makeText(getParent(),"RESET PASSWORD LINK EMAILED !",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
+                                        FancyToast.makeText(getParent(),"RESET PASSWORD LINK EMAILED !",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
                                     } catch (NullPointerException e) {
                                         e.printStackTrace();
                                     }
                                 } else {
                                     try {
                                         hideKeyboard(getParent());
-                                        FancyToast.makeText(getParent(),"FAILURE TO SEND RESET EMAIL. PLEASE DOUBLE-CHECK EMAIL INPUTTED !",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                                        FancyToast.makeText(getParent(),"FAILURE TO SEND RESET EMAIL. PLEASE DOUBLE-CHECK EMAIL INPUTTED !",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                                     } catch (NullPointerException e) {
                                         e.printStackTrace();
                                     }

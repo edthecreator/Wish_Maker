@@ -2,6 +2,7 @@ package com.eddelacruz.wishmaker.FriendFragments;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class FriendListDisplay extends Fragment implements View.OnClickListener 
     private String name = "";
     private Query query;
     private Lists lists;
+    boolean noMorePulls = false;
     private ArrayList<Lists> listsArrayList = new ArrayList<>();
 
     public FriendListDisplay() {
@@ -112,14 +114,17 @@ public class FriendListDisplay extends Fragment implements View.OnClickListener 
 
         try {
             query = FirebaseDatabase.getInstance().getReference().child("wishlist")
-                    .child(uid).limitToFirst(7);
+                    .child(uid).orderByChild("name").limitToFirst(7);
 
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        lists = (new Lists(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class)));
+                        lists = (new Lists(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class), userSnapshot.child("created_at").getValue(Long.class)));
                         listsArrayList.add(lists);
+                    }
+                    if(listsArrayList.size() < 7) {
+                        noMorePulls = true;
                     }
                     setupAdapter(listsArrayList);
                     removeLoading();
@@ -161,7 +166,55 @@ public class FriendListDisplay extends Fragment implements View.OnClickListener 
                 }
             }
         });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                    anotherPull();
+                    Log.d("-----","end");
+
+                }
+            }
+        });
         recyclerView.setAdapter(listsAdapter);
+    }
+
+    private void anotherPull(){
+        try {
+            final int listsOldSize = listsArrayList.size() - 1;
+            Query AnotherQuery = FirebaseDatabase.getInstance().getReference().child("wishlist")
+                    .child(uid).orderByChild("name").startAt(listsArrayList.get(listsArrayList.size() - 1).getName()).limitToFirst(7);
+
+            AnotherQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        lists = (new Lists(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class), userSnapshot.child("created_at").getValue(Long.class)));
+                        listsArrayList.add(lists);
+                    }
+                    if(listsArrayList.size() % 7 != 0 || dataSnapshot.getChildrenCount() == 0L) {
+                        noMorePulls = true;
+                    }
+
+                    if(dataSnapshot.getChildrenCount() != 0L) {
+                        listsArrayList.remove(listsOldSize);
+                    }
+
+                    listsAdapter.notifyDataSetChanged();
+                    //listsAdapter.notifyItemRangeInserted(listsOldSize, listsArrayList.size());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
+        } catch (com.google.firebase.database.DatabaseException e) {
+            e.printStackTrace();
+            removeLoading();
+        }
     }
 
     private void setUpLoading() {
