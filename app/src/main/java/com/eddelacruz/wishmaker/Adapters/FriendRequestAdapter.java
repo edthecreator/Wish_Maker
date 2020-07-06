@@ -70,7 +70,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public void removeRequest(int pos) {
         friendsList.remove(pos);
-        notifyItemChanged(pos);
+        notifyDataSetChanged();
     }
 
     private class RequestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

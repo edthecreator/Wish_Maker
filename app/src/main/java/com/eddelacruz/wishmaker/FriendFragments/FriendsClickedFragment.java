@@ -139,26 +139,4 @@ public class FriendsClickedFragment extends Fragment implements View.OnClickList
     }
 }
 
-    /*
-    private void firebaseCall() {
-        query = FirebaseDatabase.getInstance().getReference()
-                .child("users").child(uid).orderByKey().limitToFirst(5);
 
-        Log.d(TAG, "User Query : " + uid);
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    user = (new User(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class), userSnapshot.child("uid").getValue(String.class)));
-                    Log.d(TAG, "User initialized with " + user.getName() + " imagelink : ");
-                }
-                initializeData(user);
-                removeLoading();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-    } */

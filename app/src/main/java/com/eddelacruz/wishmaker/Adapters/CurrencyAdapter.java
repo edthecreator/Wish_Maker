@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.concurrent.BlockingDeque;
 
 public class CurrencyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static String TAG = "FRIENDS ADAPTER";
+    private static String TAG = "CURRENCY ADAPTER";
 
     private Context context;
     private String symbol;

@@ -47,7 +47,7 @@ public class SignUpNextStep extends Fragment implements View.OnClickListener {
     private String email, firstName, lastName;
     private EditText ETName, ETLast;
     private FirebaseAuth auth;
-    private String encryptedPassword;
+    private String password;
 
     public SignUpNextStep() { }
 
@@ -58,11 +58,10 @@ public class SignUpNextStep extends Fragment implements View.OnClickListener {
         try {
             Bundle extras = this.getArguments();
             email = extras.getString("email", "");
-            final String password = extras.getString("password", "");
+            password = extras.getString("password", "");
             //try {
                 //encryptedPassword = encryptExample.generateStorngPasswordHash(password);
-                encryptedPassword = password;
-                Log.d(TAG, "ENCRYPTED PASSWORD: " + encryptedPassword);
+
             /*} catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             } catch (InvalidKeySpecException e) {
@@ -140,7 +139,7 @@ public class SignUpNextStep extends Fragment implements View.OnClickListener {
         Log.d(TAG, "CREATE USER DB ");
 
         //create user
-        auth.createUserWithEmailAndPassword(email, encryptedPassword)
+        auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

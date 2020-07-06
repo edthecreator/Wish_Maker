@@ -95,10 +95,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.SaveTV:
-                Long t4Check = System.currentTimeMillis() - DataManager.getInstance().getSettings().getLast_date_changed();
+                try {
+                    Long t4Check = System.currentTimeMillis() - DataManager.getInstance().getSettings().getLast_date_changed();
                     if(changeSeachable.isChecked() && !stateOfSwitch) {
 
-                       // ((MainActivity) getActivity()).setSettings(true);
+                        // ((MainActivity) getActivity()).setSettings(true);
                         if(t4Check > TimeUnit.HOURS.toMillis(24)) {
                             firebasePush(true);
                             stateOfSwitch = true;
@@ -117,6 +118,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                         //firebasePush(stateOfSwitch);
                         //((MainActivity) getActivity()).setSettings(false);
                     }
+
+                } catch (NullPointerException e) {
+
+                }
 
                 break;
             case R.id.changeCurrency:

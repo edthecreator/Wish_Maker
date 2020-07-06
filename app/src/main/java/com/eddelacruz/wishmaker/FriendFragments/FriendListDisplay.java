@@ -203,7 +203,6 @@ public class FriendListDisplay extends Fragment implements View.OnClickListener 
                     }
 
                     listsAdapter.notifyDataSetChanged();
-                    //listsAdapter.notifyItemRangeInserted(listsOldSize, listsArrayList.size());
                 }
 
                 @Override

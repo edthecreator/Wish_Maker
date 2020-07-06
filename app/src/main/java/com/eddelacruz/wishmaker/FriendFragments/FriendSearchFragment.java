@@ -112,13 +112,13 @@ public class FriendSearchFragment extends Fragment implements View.OnClickListen
     private void friendSearch(String searchName) {
 
         query = FirebaseDatabase.getInstance().getReference()
-                .child("users").orderByChild("name").equalTo(searchName).limitToFirst(7);
+                .child("users").orderByChild("fullName").equalTo(searchName).limitToFirst(7);
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    friendRow = (new Friends(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class),  userSnapshot.child("uid").getValue(String.class)));
+                    friendRow = (new Friends(userSnapshot.child("image").getValue(String.class), userSnapshot.child("fullName").getValue(String.class),  userSnapshot.child("uid").getValue(String.class)));
                     friendList.add(friendRow);
                 }
                 setupAdapter(friendList);
@@ -141,13 +141,13 @@ public class FriendSearchFragment extends Fragment implements View.OnClickListen
             try {
                 final int listsOldSize = friendList.size() - 1;
                 Query AnotherQuery = FirebaseDatabase.getInstance().getReference()
-                        .child("users").orderByChild("name").equalTo(searchName).startAt(friendList.get(listsOldSize).getName()).limitToFirst(7);
+                        .child("users").orderByChild("fullName").equalTo(searchName).startAt(friendList.get(listsOldSize).getName()).limitToFirst(7);
 
                 AnotherQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                            friendRow = (new Friends(userSnapshot.child("image").getValue(String.class), userSnapshot.child("name").getValue(String.class),  userSnapshot.child("uid").getValue(String.class)));
+                            friendRow = (new Friends(userSnapshot.child("image").getValue(String.class), userSnapshot.child("fullName").getValue(String.class),  userSnapshot.child("uid").getValue(String.class)));
                             friendList.add(friendRow);
                         }
                         if (friendList.size() % 7 != 0 || dataSnapshot.getChildrenCount() == 0L) {

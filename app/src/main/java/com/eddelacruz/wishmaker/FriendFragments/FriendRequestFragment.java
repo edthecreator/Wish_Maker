@@ -165,7 +165,6 @@ public class FriendRequestFragment extends Fragment implements View.OnClickListe
                             friendList.remove(listsOldSize);
                         }
 
-                        Log.e(TAG, "Log this itram range inserted " + String.valueOf(listsOldSize) + " " + String.valueOf(friendList.size() - 1));
                         friendRequestAdapter.notifyDataSetChanged();
                     }
 
@@ -182,11 +181,8 @@ public class FriendRequestFragment extends Fragment implements View.OnClickListe
     }
 
     private void removeRequest(boolean accept, String uid, String name, String url) {
-        //((MainActivity) getActivity()).setFriends(true);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference remove_requests = database.getReference("requests/" + myuid);
-       // final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("tracking/" + uid);
-       // databaseReference.child("reload_friends").setValue("Y");
 
 
 
